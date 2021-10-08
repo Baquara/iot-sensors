@@ -39,11 +39,11 @@ def post_table():
     sensor = request.json['sensor']
     data = dbresults('SELECT * FROM mote WHERE moteid='+sensor)
     voltagens = []
-    humidades = []
+    umidade = []
     temperaturas = []
     luminosidades = []
     modavol = 0
-    modahumidades =0
+    modaumidade =0
     modatemperaturas = 0
     modaluz = 0
     tamanho = 0
@@ -53,9 +53,9 @@ def post_table():
         except:
             voltagens.append(0)
         try:
-            humidades.append(float(x["humidity"]))
+            umidade.append(float(x["humidity"]))
         except:
-            humidades.append(0)
+            umidade.append(0)
         try:
             temperaturas.append(float(x["temperature"]))
         except:
@@ -66,11 +66,11 @@ def post_table():
             luminosidades.append(0)
         tamanho+=1
     modavol = mode(voltagens)
-    modahumidades = mode(humidades)
+    modaumidade = mode(umidade)
     modatemperaturas = mode(temperaturas)
     modaluz = mode(luminosidades)
     print("Moda voltagem: "+str(modavol))
-    print("Moda humidades: "+str(modahumidades))
+    print("Moda umidade: "+str(modaumidade))
     print("Moda temperaturas: "+str(modatemperaturas))
     print("Moda luz: "+str(modaluz))
     #for x in data:
@@ -82,7 +82,7 @@ def post_table():
         #if((int(float(x["temperature"])) - modatemperaturas) > 100):
             #print("Elemento de epoch "+str(x["epoch"])+" apresenta temperatura divergente. Temperatura comum ="+str(modatemperaturas)+", temperatura do elemento: "+str(x["temperature"]))
 
-    return jsonify(data,{"Moda_voltagem":modavol,"Moda_humidades":modahumidades,"Moda_temperaturas":modatemperaturas,"Moda_luminosidade":modaluz}),200
+    return jsonify(data,{"Moda_voltagem":modavol,"Moda_umidade":modaumidade,"Moda_temperaturas":modatemperaturas,"Moda_luminosidade":modaluz}),200
 
 #Gerar imagem
 @app.route('/generate', methods=['POST'])

@@ -62,7 +62,7 @@ xhr.onreadystatechange = function () {
                         th.innerHTML = col[i];
                         tr.appendChild(th);
                     }
-
+                    
                     // ADD JSON DATA TO THE TABLE AS ROWS.
                     for (var i = 0; i < jso2.length; i++) {
 
@@ -71,6 +71,23 @@ xhr.onreadystatechange = function () {
                         for (var j = 0; j < col.length; j++) {
                             var tabCell = tr.insertCell(-1);
                             tabCell.innerHTML = jso2[i][col[j]];
+                            if (j==11){
+                                subtracao = parseFloat(jso2[i][col[4]]) - parseFloat(modas["Moda_luminosidade"])
+                                tabCell.innerHTML = Number((subtracao).toFixed(2));;
+                            }
+                            if (j==12){
+                                subtracao = parseFloat(jso2[i][col[8]]) - parseFloat(modas["Moda_voltagem"])
+                                tabCell.innerHTML = Number((subtracao).toFixed(2));;
+                            }
+                            if (j==13){
+                                subtracao = parseFloat(jso2[i][col[6]]) - parseFloat(modas["Moda_temperaturas"])
+                                tabCell.innerHTML = Number((subtracao).toFixed(2));;
+                            }
+
+                            if (j==14){
+                                subtracao = parseFloat(jso2[i][col[2]]) - parseFloat(modas["Moda_umidade"])
+                                tabCell.innerHTML = Number((subtracao).toFixed(2));;
+                            }
                         
                         }
 

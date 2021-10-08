@@ -3,6 +3,8 @@ import sys
 from PIL import Image, ImageDraw
 from flask import Flask,jsonify, render_template, request
 from flask_cors import CORS
+from statistics import mode
+from numpy import mean
 
 
 app = Flask(__name__)
@@ -36,7 +38,51 @@ def test():
 def post_table():
     sensor = request.json['sensor']
     data = dbresults('SELECT * FROM mote WHERE moteid='+sensor)
-    return jsonify(data),200
+    voltagens = []
+    humidades = []
+    temperaturas = []
+    luminosidades = []
+    modavol = 0
+    modahumidades =0
+    modatemperaturas = 0
+    modaluz = 0
+    tamanho = 0
+    for x in data:
+        try:
+            voltagens.append(float(x["voltage"]))
+        except:
+            voltagens.append(0)
+        try:
+            humidades.append(float(x["humidity"]))
+        except:
+            humidades.append(0)
+        try:
+            temperaturas.append(float(x["temperature"]))
+        except:
+            temperaturas.append(0)
+        try:
+            luminosidades.append(float(x["light"]))
+        except:
+            luminosidades.append(0)
+        tamanho+=1
+    modavol = mode(voltagens)
+    modahumidades = mode(humidades)
+    modatemperaturas = mode(temperaturas)
+    modaluz = mode(luminosidades)
+    print("Moda voltagem: "+str(modavol))
+    print("Moda humidades: "+str(modahumidades))
+    print("Moda temperaturas: "+str(modatemperaturas))
+    print("Moda luz: "+str(modaluz))
+    #for x in data:
+        #input(str(x["epoch"]) + " "+(x["voltage"]))
+        #if(int(x["voltage"]) is not modavol):
+            #print("Elemento de epoch "+str(x["epoch"])+" apresenta voltagem divergente.")
+        #if( (int(float(x["humidity"])) - modahumidades) > 10 or (int(float(x["humidity"])) - modahumidades) < -10):
+            #print("Elemento de epoch "+str(x["epoch"])+" apresenta humidade divergente. Humidade comum ="+str(modahumidades)+", humidade do elemento: "+str(x["humidity"]))
+        #if((int(float(x["temperature"])) - modatemperaturas) > 100):
+            #print("Elemento de epoch "+str(x["epoch"])+" apresenta temperatura divergente. Temperatura comum ="+str(modatemperaturas)+", temperatura do elemento: "+str(x["temperature"]))
+
+    return jsonify(data,{"Moda_voltagem":modavol,"Moda_humidades":modahumidades,"Moda_temperaturas":modatemperaturas,"Moda_luminosidade":modaluz}),200
 
 #Gerar imagem
 @app.route('/generate', methods=['POST'])

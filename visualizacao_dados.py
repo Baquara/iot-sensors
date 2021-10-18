@@ -65,6 +65,12 @@ def post_table():
         except:
             luminosidades.append(0)
         tamanho+=1
+    import matplotlib.pyplot as plt
+    plt.plot(voltagens, 'r--',umidade, 'b--',temperaturas,'g--',luminosidades,'y--')
+    plt.savefig('chart.png')
+    from PIL import Image
+    image = Image.open('chart.png')
+    image.show()
     modavol = mode(voltagens)
     modaumidade = mode(umidade)
     modatemperaturas = mode(temperaturas)
